@@ -1,6 +1,9 @@
 # V8c2
 U8g2 sim lib for VCVRack.
 
+![Jan-17-2025 10-16-16](https://github.com/user-attachments/assets/567cecc1-0687-4b21-83ca-bded4ca47a5f)
+
+
 ## Overview
 This is a set of drawing routines and widgets to simulate 3 sizes of OLED with VCVRack.
 
