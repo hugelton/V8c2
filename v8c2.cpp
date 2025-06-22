@@ -84,6 +84,10 @@ bool V8C2Display::getBufferPixel(int x, int y) const {
   return (buffer[idx] & mask) != 0;
 }
 
+void V8C2Display::drawPixel(int x, int y) {
+  setBufferPixel(x, y, true);
+}
+
 void V8C2Display::drawBox(int x, int y, int w, int h, bool set) {
   beginUpdate();
 
@@ -114,6 +118,107 @@ void V8C2Display::drawRect(int x, int y, int w, int h) {
   for (int j = y; j < y + h; j++) {
     setBufferPixel(x, j, true);
     setBufferPixel(x + w - 1, j, true);
+  }
+
+  endUpdate();
+}
+
+void V8C2Display::drawFrame(int x, int y, int w, int h) {
+  drawRect(x, y, w, h);
+}
+
+void V8C2Display::drawRFrame(int x, int y, int w, int h, int r) {
+  beginUpdate();
+
+  if (r <= 0) {
+    drawRect(x, y, w, h);
+    endUpdate();
+    return;
+  }
+
+  // Horizontal edges
+  for (int i = x + r; i < x + w - r; ++i) {
+    setBufferPixel(i, y, true);
+    setBufferPixel(i, y + h - 1, true);
+  }
+  // Vertical edges
+  for (int j = y + r; j < y + h - r; ++j) {
+    setBufferPixel(x, j, true);
+    setBufferPixel(x + w - 1, j, true);
+  }
+
+  int xx = r;
+  int yy = 0;
+  int err = 0;
+  while (xx >= yy) {
+    setBufferPixel(x + r - xx, y + r - yy, true);
+    setBufferPixel(x + r - yy, y + r - xx, true);
+
+    setBufferPixel(x + w - r - 1 + xx, y + r - yy, true);
+    setBufferPixel(x + w - r - 1 + yy, y + r - xx, true);
+
+    setBufferPixel(x + r - xx, y + h - r - 1 + yy, true);
+    setBufferPixel(x + r - yy, y + h - r - 1 + xx, true);
+
+    setBufferPixel(x + w - r - 1 + xx, y + h - r - 1 + yy, true);
+    setBufferPixel(x + w - r - 1 + yy, y + h - r - 1 + xx, true);
+
+    if (err <= 0) {
+      yy++;
+      err += 2 * yy + 1;
+    }
+    if (err > 0) {
+      xx--;
+      err -= 2 * xx + 1;
+    }
+  }
+
+  endUpdate();
+}
+
+void V8C2Display::drawRBox(int x, int y, int w, int h, int r) {
+  beginUpdate();
+
+  if (r <= 0) {
+    drawBox(x, y, w, h, true);
+    endUpdate();
+    return;
+  }
+
+  for (int j = y + r; j < y + h - r; ++j) {
+    for (int i = x; i < x + w; ++i) {
+      setBufferPixel(i, j, true);
+    }
+  }
+
+  for (int j = y; j < y + r; ++j) {
+    for (int i = x + r; i < x + w - r; ++i) {
+      setBufferPixel(i, j, true);
+      setBufferPixel(i, y + h - 1 - (j - y), true);
+    }
+  }
+
+  int xx = r;
+  int yy = 0;
+  int err = 0;
+  while (xx >= yy) {
+    for (int i = x + r - xx; i <= x + r + xx - 1; ++i) {
+      setBufferPixel(i, y + r - yy, true);
+      setBufferPixel(i, y + h - r - 1 + yy, true);
+    }
+    for (int i = x + r - yy; i <= x + r + yy - 1; ++i) {
+      setBufferPixel(i, y + r - xx, true);
+      setBufferPixel(i, y + h - r - 1 + xx, true);
+    }
+
+    if (err <= 0) {
+      yy++;
+      err += 2 * yy + 1;
+    }
+    if (err > 0) {
+      xx--;
+      err -= 2 * xx + 1;
+    }
   }
 
   endUpdate();
@@ -235,6 +340,10 @@ void V8C2Display::fillCircle(int x0, int y0, int r) {
   }
 
   endUpdate();
+}
+
+void V8C2Display::drawDisc(int x0, int y0, int r) {
+  fillCircle(x0, y0, r);
 }
 
 void V8C2Display::drawTriangle(int x0, int y0, int x1, int y1, int x2, int y2) {
@@ -379,6 +488,11 @@ void V8C2Display::drawXBM(int x, int y, int width, int height,
   }
 
   endUpdate();
+}
+
+void V8C2Display::drawBitmap(int x, int y, int width, int height,
+                             const uint8_t *bitmap) {
+  drawXBM(x, y, width, height, bitmap);
 }
 // bool V8C2Display::needsUpdate() const { return dirty || forceUpdate; }
 
