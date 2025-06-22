@@ -25,13 +25,18 @@ public:
   void drawHLine(int x, int y, int w);
   void drawVLine(int x, int y, int h);
   void drawRect(int x, int y, int w, int h);
+  void drawFrame(int x, int y, int w, int h); // U8g2 compatible name
   void drawBox(int x, int y, int w, int h, bool set = true);
+  void drawRFrame(int x, int y, int w, int h, int r);
+  void drawRBox(int x, int y, int w, int h, int r);
   void drawCircle(int x0, int y0, int r);
   void fillCircle(int x0, int y0, int r);
+  void drawDisc(int x0, int y0, int r); // alias of fillCircle
   void drawTriangle(int x0, int y0, int x1, int y1, int x2, int y2);
   void fillTriangle(int x0, int y0, int x1, int y1, int x2, int y2);
   // Bitmap operations
   void drawXBM(int x, int y, int width, int height, const uint8_t *bitmap);
+  void drawBitmap(int x, int y, int width, int height, const uint8_t *bitmap);
   // Display control
   void setDisplayRotation(uint8_t r);
   void invertDisplay(bool i);

@@ -25,6 +25,16 @@ It can simulate a monochrome display using SSD1306.
 | Display091 | 0.91" | 128 × 32 | 23.114 × 5.778 |
 | Display042 | 0.42" | 72 × 40 | 10.668 × 5.926 |
 
+## Additional Drawing Functions
+
+The library now provides helpers compatible with common U8g2 calls:
+
+* `drawFrame()` – alias of `drawRect()`
+* `drawRFrame()` – rounded rectangle frame
+* `drawRBox()` – rounded filled rectangle
+* `drawDisc()` – alias of `fillCircle()`
+* `drawBitmap()` – wrapper for `drawXBM()`
+
 ## Example
 
 ```cpp
